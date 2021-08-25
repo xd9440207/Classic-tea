@@ -1,0 +1,15 @@
+import pandas as pd
+import pymysql
+conn=pymysql.connect(
+           host='127.0.0.1',
+           user='root',
+           password='01280128',
+           database='Test_pb',
+           charset='utf8'
+)
+
+students = pd.read_sql('select * from students',con=conn)
+
+Python Pandas
+studentabove20 = (students['Age']>20)
+studentabove20 = students[studentabove20]
