@@ -1,0 +1,12 @@
+import pandas as pd
+csv_data_path = 'https://raw.githubusercontent.com/turingplanet/pandas-intro/main/public-datasets/country.csv'
+country = pd.read_csv(csv_data_path)
+
+
+country_info['Country'] = country_info['Country'].str.strip()
+country_info.set_index(['Country'], drop = True, inplace = True)
+
+country_info.sort_index(ascending= True)
+
+above300migration = (country['Net migration']>'300')
+abovemigration = country[above300migration]
