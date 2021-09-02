@@ -1,0 +1,222 @@
+基本創建Table語法
+CREATE TABLE table名稱 (
+column1 項目屬性1 datatype1 項目資料類型1
+column2 項目屬性2 datatype2 項目資料類型2
+column3 項目屬性3 datatype3 項目資料類型3
+PRIMARY KEY (column1 選擇column1為主鍵));
+
+Table創建與約束語法
+CREATE TABLE table名稱 (
+column1 datatype1  constraint1
+column2 datatype2  constraint2
+column3 datatype3  constraint3
+PRIMARY KEY (column1));
+
+更改/新增約束指令：ALTER TABLE Students 
+MODIFY Age int NOT NULL;
+
+Table查詢語法
+SELECT * FROM table名稱 
+
+條件查詢
+SELECT * FROM table名稱  
+WHERE columnname⋛ condition 條件
+
+SELECT * FROM table名稱  
+WHERE 條件一 AND 條件二
+
+SELECT * FROM table名稱  
+WHERE 條件一 OR 條件二
+
+SELECT * FROM table名稱  
+WHERE NOT 條件一 也可為 WHERE <>
+
+SELECT * FROM table名稱  
+WHERE NOT （條件一 AND/OR 條件二）
+
+近似值查詢
+SELECT * FROM table名稱  
+WHERE columnname  LIKE ‘ab%’
+
+投影查詢（顯示特定欄目查詢）
+SELECT columnname1,columnname2 FROM table名稱   WHERE 條件
+
+篩選出各不同性質查詢
+SELECT DISTINCT columnname 
+FROM table名稱 
+
+查詢後排序
+SELECT * FROM table名稱  
+ORDER BY columnname ASC/DESC
+
+SELECT * FROM table名稱  
+ORDER BY 欄目一 ASC,欄目二 DESC
+
+
+聚合查詢：計數/總和/平均/最大小值
+SELECT COUNT (*) FROM table名稱                      
+
+SELECT COUNT (*) AS 計數欄位名稱 
+FROM table名稱
+
+SELECT COUNT (*)FROM table 
+WHERE columnname⋛ condition 條件
+
+SELECT SUM (columnname)FROM table
+(WHERE columnname⋛ condition 條件)
+
+SELECT AVG (columnname)FROM table
+(WHEREcolumnname⋛ condition 條件)
+
+SELECT MAX (columnname)FROM table
+(WHEREcolumnname⋛ condition 條件)
+
+SELECT MIN (columnname)FROM table
+(WHEREcolumnname⋛ condition 條件)
+
+分組查詢（將具有同一欄目性質的資料分組後進行聚合查詢）
+SELECTcolumnname1,columnname2 
+COUNT(*) FROM table GROUP BYcn1,cn2 
+
+如 SELECT courseattended,gender, 
+COUNT(*) as 'Students' 
+FROM Test_pb.Students GROUP BY courseattended, gender
+
+SELECTcolumnname1,columnname2 
+AVG(columnname*) FROM table 
+GROUP BYcn1,cn2
+
+SELECTcolumnname1,columnname2 
+SUM(columnname*) FROM table 
+GROUP BYcn1,cn2
+
+SELECTcolumnname1,columnname2 
+MAX/MIN(columnname*) FROM table 
+GROUP BYcn1,cn2
+
+多表查詢
+SELECT tablename1.columnname1 as 名稱一,tablename2.columnname2 as 名稱二 
+FROM tablename1, tablename2
+
+SELECT tablename1.columnname1 as 名稱一,tablename1.columnname2 as 名稱二 ,
+tablename2.columnname3 as 名稱三
+FROM tablename1, tablename2
+WHERE columnname2=columnname3
+
+
+多表查詢JOIN查詢(確認主表後嵌入資料)
+
+      JOIN語法的運作流程如下：
+确定主表，使用 FROM table_name
+紧接着确认连接的表，使用 INNER JOIN table_name
+再确定连接条件，使用 ON condition，上面语句的条件就是 主表欄目資料*=副表欄目資料*
+最后还能加上 ： WHERE、ORDER BY等子句
+
+SELECTtablename1.columnname1 as 名稱一,tablename1.columnname2 as 名稱二 ,
+tablename2.columnname3 as 名稱三
+FROM tablename1 主表名稱
+INNER JOIN tablename2 副表名稱
+ON columnname2=columnname3
+
+SELECTtablename1.columnname1 as 名稱一,tablename1.columnname2 as 名稱二 ,
+tablename2.columnname3 as 名稱三
+FROM tablename1 主表名稱
+LEFT JOIN tablename2 副表名稱
+ON columnname2=columnname3
+與INNER JOIN不同的是，LEFT JOIN會將左表（亦主表）中的所有數據抓出，即便有些數據副表是沒有的。LEFT JOIN即是以主表為基準撈出所有主表及其符合條件的對應資料，主表中沒有符合條件的資料亦會呈現出來，只不過缺少副表的對應資料。
+
+
+SELECTtablename1.columnname1 as 名稱一,tablename1.columnname2 as 名稱二 ,
+tablename2.columnname3 as 名稱三
+FROM tablename1 主表名稱
+RIGHT JOIN tablename2 副表名稱
+ON columnname2=columnname3
+RIGHT JOIN則是以右邊的表—即副表的所有資料撈出，即便副表中的有些資料主表是沒有對應的。
+
+多表查詢JOIN查詢並聯集
+USE schemaname
+SELECTtablename1.* ,tablename2.* ,
+FROM tablename1 主表名稱
+LEFT JOIN tablename2 副表名稱
+ON columnname*=columnname^
+UNION
+SELECTtablename1.* ,tablename2.* ,
+FROM tablename1 主表名稱
+RIGHT JOIN tablename2 副表名稱
+ON columnname*=columnname^
+
+
+USE schemaname
+SELECTtablename1.* ,tablename2.* ,
+FROM tablename1 主表名稱
+LEFT JOIN tablename2 副表名稱
+WHERE tablename1.primarykeyname1 IS NULL
+ON columnname*=columnname^
+UNION
+SELECTtablename1.* ,tablename2.* ,
+FROM tablename1 主表名稱
+RIGHT JOIN tablename2 副表名稱
+ON columnname*=columnname^
+WHERE tablename2.primarykeyname2 IS NULL
+要取兩表中的聯集並排除交集部分，即為將兩表中排除交集部分聯集即可達成。
+整體而言將SQL JOIN函數的用法表示如下圖。
+
+ForeignKey的操作方式
+於SQL8.0中系統中對應性的一對多的情境中，如單一商品能被多個不同顧客購買，則以產品目錄Product列表中的Primary Key商品id為顧客購買紀錄Orders中的購買產品Product id Foreign Key。
+語法則為：
+在既有的欄目中添加新的FOREIGN KEY對照
+ALTER TABLE `Test_pb`.`Students` 
+ADD CONSTRAINT `courseid`設定該FOREIGNKEY的名稱
+  FOREIGN KEY (`courseattended`)FOREIGNKEY的欄目
+  REFERENCES `Test_pb`.`Courses` (`Coursesid`)對照的Table與PK的名稱
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+以PDO方式將網頁程式語言PHP的資料連接至My SQL資料庫
+安裝PDO後，在PHP端設置PDO連接語法。
+<?php 
+$servername = "localhost"; 
+$username = "username"; 
+$password = "password"; 
+
+try { 
+$conn = new PDO("mysql:host=$servername;dbname=myDB", $username, $password); 
+echo "連接成功"; 
+} 
+catch(PDOException $e) 
+{ 
+echo $e->getMessage(); 
+} 
+?>
+並設置PHP自動生成Database
+<?php 
+$servername = "localhost" ; 
+$username = "username" ; 
+$password = "password" ; 
+
+try { 
+$conn = new PDO (" mysql:host= $servername ;dbname=myDB ", $username , $password ); 
+
+//設置PDO錯誤模式為異常 
+$conn -> setAttribute ( PDO :: ATTR_ERRMODE , PDO :: ERRMODE_EXCEPTION ); 
+$sql = "CREATE DATABASE myDBPDO" ; 
+
+//使用exec() ，因為沒有結果返回 
+$conn -> exec ( $sql ); 
+
+echo "數據庫創建成功<br>" ; 
+} 
+catch( PDOException $e ) 
+{ 
+echo $sql . "<br>" . $e -> getMessage (); 
+} 
+
+$conn = null ; 
+?>
+
+
+
+
+
+
+
